@@ -1,4 +1,4 @@
-from __future__ import annotations  # to avoid quoting type hints
+gegefrom __future__ import annotations  # to avoid quoting type hints
 
 import base64
 import copy
@@ -51,7 +51,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-# Initialize Magika for file type identification
+# 初始化Magika用于文件类型识别
 magika = Magika()
 
 
@@ -94,8 +94,8 @@ def resolve_absolute_path(filepath: Union[str, Optional[Path]], strict=False) ->
 
 
 def get_from_dict(dictionary, *args):
-    """null-aware get from a nested dictionary
-    Returns: dictionary[args[0]][args[1]]... or None if any keys missing"""
+    """从嵌套字典中安全获取值
+    返回: dictionary[args[0]][args[1]]... 如果任何键缺失则返回None"""
     current = dictionary
     for arg in args:
         if not hasattr(current, "__iter__") or arg not in current:
@@ -124,17 +124,17 @@ def fix_json_dict(json_dict: dict) -> dict:
 
 
 def get_file_type(file_type: str, file_content: bytes) -> tuple[str, str]:
-    "Get file type from file mime type"
+    "从文件MIME类型获取文件类型"
 
-    # Extract encoding from file_type
+    # 从file_type中提取编码
     encoding = file_type.split("=")[1].strip().lower() if ";" in file_type else None
     file_type = file_type.split(";")[0].strip() if ";" in file_type else file_type
 
-    # Infer content type from reading file content
+    # 通过读取文件内容推断内容类型
     try:
         content_group = magika.identify_bytes(file_content).output.group
     except Exception:
-        # Fallback to using just file type if content type cannot be inferred
+        # 如果无法推断内容类型，则回退到仅使用文件类型
         content_group = "unknown"
 
     if file_type in ["text/markdown"]:
@@ -160,35 +160,35 @@ def get_file_type(file_type: str, file_content: bytes) -> tuple[str, str]:
 def load_model(
     model_name: str, model_type, model_dir=None, device: str = None
 ) -> Union[BaseEncoder, SentenceTransformer, CrossEncoder]:
-    "Load model from disk or huggingface"
-    # Construct model path
+    "从磁盘或HuggingFace加载模型"
+    # 构建模型路径
     logger = logging.getLogger(__name__)
     model_path = path.join(model_dir, model_name.replace("/", "_")) if model_dir is not None else None
 
-    # Load model from model_path if it exists there
+    # 如果模型路径存在，则从磁盘加载模型
     model_type_class = get_class_by_name(model_type) if isinstance(model_type, str) else model_type
     if model_path is not None and resolve_absolute_path(model_path).exists():
-        logger.debug(f"Loading {model_name} model from disk")
+        logger.debug(f"从磁盘加载 {model_name} 模型")
         model = model_type_class(get_absolute_path(model_path), device=device)
-    # Else load the model from the model_name
+    # 否则从model_name加载模型
     else:
-        logger.info(f"🤖 Downloading {model_name} model from web")
+        logger.info(f"🤖 从网络下载 {model_name} 模型")
         model = model_type_class(model_name, device=device)
         if model_path is not None:
-            logger.info(f"📩 Saved {model_name} model to disk")
+            logger.info(f"📩 已将 {model_name} 模型保存到磁盘")
             model.save(model_path)
 
     return model
 
 
 def get_class_by_name(name: str) -> object:
-    "Returns the class object from name string"
+    "从名称字符串返回类对象"
     module_name, class_name = name.rsplit(".", 1)
     return getattr(import_module(module_name), class_name)
 
 
 class timer:
-    """Context manager to log time taken for a block of code to run"""
+    """上下文管理器，用于记录代码块运行时间"""
 
     def __init__(self, message: str, logger: logging.Logger, device: torch.device = None, log_level=logging.DEBUG):
         self.message = message
@@ -225,44 +225,44 @@ class LRU(OrderedDict):
 
 
 def get_server_id():
-    """Get, Generate Persistent, Random ID per server install.
-    Helps count distinct khoj servers deployed.
-    Maintains anonymity by using non-PII random id."""
-    # Initialize server_id to None
+    """获取、生成每个服务器安装的持久化随机ID。
+    帮助统计部署的不同khoj服务器数量。
+    通过使用非PII随机ID保持匿名性。"""
+    # 初始化server_id为None
     server_id = None
-    # Expand path to the khoj env file. It contains persistent internal app data
+    # 扩展khoj环境文件的路径。它包含持久化的内部应用数据
     app_env_filename = path.expanduser(constants.app_env_filepath)
 
-    # Check if the file exists
+    # 检查文件是否存在
     if path.exists(app_env_filename):
-        # Read the contents of the file
+        # 读取文件内容
         with open(app_env_filename, "r") as f:
             contents = f.readlines()
 
-        # Extract the server_id from the contents
+        # 从内容中提取server_id
         for line in contents:
             key, value = line.strip().split("=")
             if key.strip() == "server_id":
                 server_id = value.strip()
                 break
 
-        # If server_id is not found, generate and write to env file
+        # 如果未找到server_id，生成并写入环境文件
         if server_id is None:
-            # If server_id is not found, generate a new one
+            # 如果未找到server_id，生成一个新的
             server_id = str(uuid.uuid4())
-
+    
             with open(app_env_filename, "a") as f:
                 f.write("server_id=" + server_id + "\n")
-    else:
-        # If server_id is not found, generate a new one
-        server_id = str(uuid.uuid4())
-
-        # Create khoj config directory if it doesn't exist
-        os.makedirs(path.dirname(app_env_filename), exist_ok=True)
-
-        # Write the server_id to the env file
-        with open(app_env_filename, "w") as f:
-            f.write("server_id=" + server_id + "\n")
+        else:
+            # 如果未找到server_id，生成一个新的
+            server_id = str(uuid.uuid4())
+    
+            # 如果khoj配置目录不存在，则创建它
+            os.makedirs(path.dirname(app_env_filename), exist_ok=True)
+    
+            # 将server_id写入环境文件
+            with open(app_env_filename, "w") as f:
+                f.write("server_id=" + server_id + "\n")
 
     return server_id
 
@@ -274,15 +274,15 @@ def log_telemetry(
     disable_telemetry_env: bool = False,
     properties: dict = None,
 ):
-    """Log basic app usage telemetry like client, os, api called"""
-    # Do not log usage telemetry, if telemetry is disabled via app config
+    """记录基本的应用使用遥测数据，如客户端、操作系统、调用的API"""
+    # 如果通过应用配置禁用了遥测，则不记录使用遥测数据
     if disable_telemetry_env:
         return []
 
     if properties.get("server_id") is None:
         properties["server_id"] = get_server_id()
 
-    # Populate telemetry data to log
+    # 填充要记录的遥测数据
     request_body = {
         "telemetry_type": telemetry_type,
         "server_version": version("khoj"),
@@ -291,18 +291,18 @@ def log_telemetry(
     }
     request_body.update(properties or {})
     if api:
-        # API endpoint on server called by client
+        # 客户端调用的服务器API端点
         request_body["api"] = api
     if client:
-        # Client from which the API was called. E.g. Emacs, Obsidian
+        # 调用API的客户端。例如：Emacs、Obsidian
         request_body["client"] = client
 
-    # Log telemetry data to telemetry endpoint
+    # 将遥测数据记录到遥测端点
     return request_body
 
 
 def get_device_memory() -> int:
-    """Get device memory in GB"""
+    """获取设备内存，以GB为单位"""
     device = get_device()
     if device.type == "cuda":
         return torch.cuda.get_device_properties(device).total_memory
@@ -313,12 +313,12 @@ def get_device_memory() -> int:
 
 
 def get_device() -> torch.device:
-    """Get device to run model on"""
+    """获取用于运行模型的设备"""
     if torch.cuda.is_available():
-        # Use CUDA GPU
+        # 使用CUDA GPU
         return torch.device("cuda:0")
     elif torch.backends.mps.is_available():
-        # Use Apple M1 Metal Acceleration
+        # 使用Apple M1 Metal加速
         return torch.device("mps")
     else:
         return torch.device("cpu")
@@ -707,7 +707,7 @@ class ImageIntentType(Enum):
 
 
 def generate_random_name():
-    # List of adjectives and nouns to choose from
+    # 可供选择的形容词和名词列表
     adjectives = [
         "happy",
         "serendipitous",
@@ -722,11 +722,11 @@ def generate_random_name():
     ]
     nouns = ["dog", "cat", "falcon", "whale", "turtle", "rabbit", "hamster", "snake", "spider", "elephant"]
 
-    # Select two random words from the lists
+    # 从列表中选择两个随机单词
     adjective = random.choice(adjectives)
     noun = random.choice(nouns)
 
-    # Combine the words to form a name
+    # 组合单词形成名称
     name = f"{adjective} {noun}"
 
     return name
@@ -755,7 +755,7 @@ def batcher(iterable, max_n):
 
 
 def is_env_var_true(env_var: str, default: str = "false") -> bool:
-    """Get state of boolean environment variable"""
+    """获取布尔环境变量的状态"""
     return os.getenv(env_var, default).lower() == "true"
 
 
@@ -784,7 +784,7 @@ def is_code_sandbox_enabled():
 
 
 def is_valid_url(url: str) -> bool:
-    """Check if a string is a valid URL"""
+    """检查字符串是否为有效的URL"""
     try:
         result = urlparse(url.strip())
         return all([result.scheme, result.netloc])
@@ -858,7 +858,7 @@ def is_internal_url(url: str) -> bool:
 
 
 def convert_image_to_webp(image_bytes):
-    """Convert image bytes to webp format for faster loading"""
+    """将图像字节转换为webp格式以加快加载速度"""
     image_io = io.BytesIO(image_bytes)
     with Image.open(image_io) as original_image:
         webp_image_io = io.BytesIO()
@@ -906,17 +906,17 @@ def truncate_code_context(original_code_results: dict[str, Any], max_chars=10000
     """
     Truncate large output files and drop image file data from code results.
     """
-    # Create a deep copy of the code results to avoid modifying the original data
+    # 创建代码结果的深拷贝以避免修改原始数据
     code_results = copy.deepcopy(original_code_results)
     for code_result in code_results.values():
         for idx, output_file in enumerate(code_result["results"]["output_files"]):
-            # Drop image files from code results
+            # 从代码结果中删除图像文件
             if Path(output_file["filename"]).suffix in {".png", ".jpg", ".jpeg", ".webp"}:
                 code_result["results"]["output_files"][idx] = {
                     "filename": output_file["filename"],
                     "b64_data": "[placeholder for generated image data for brevity]",
                 }
-            # Truncate large output files
+            # 截断大型输出文件
             elif len(output_file["b64_data"]) > max_chars:
                 code_result["results"]["output_files"][idx] = {
                     "filename": output_file["filename"],
@@ -934,7 +934,7 @@ def truncate_code_context(original_code_results: dict[str, Any], max_chars=10000
 
 @lru_cache
 def tz_to_cc_map() -> dict[str, str]:
-    """Create a mapping of timezone to country code"""
+    """创建时区到国家代码的映射"""
     timezone_country = {}
     for countrycode in country_timezones:
         timezones = country_timezones[countrycode]
@@ -944,12 +944,12 @@ def tz_to_cc_map() -> dict[str, str]:
 
 
 def get_country_code_from_timezone(tz: str) -> str:
-    """Get country code from timezone"""
+    """从时区获取国家代码"""
     return tz_to_cc_map().get(tz, "US")
 
 
 def get_country_name_from_timezone(tz: str) -> str:
-    """Get country name from timezone"""
+    """从时区获取国家名称"""
     return country_names.get(get_country_code_from_timezone(tz), "United States")
 
 
@@ -966,7 +966,7 @@ def get_cost_of_chat_message(
     Calculate cost of chat message based on input and output tokens
     """
 
-    # Calculate cost of input and output tokens. Costs are per million tokens
+    # 计算输入和输出令牌的成本。每百万个令牌的成本
     input_cost = constants.model_to_cost.get(model_name, {}).get("input", 0) * (input_tokens / 1e6)
     output_cost = constants.model_to_cost.get(model_name, {}).get("output", 0) * (output_tokens / 1e6)
     thought_cost = constants.model_to_cost.get(model_name, {}).get("thought", 0) * (thought_tokens / 1e6)
@@ -1071,7 +1071,7 @@ def get_ai_api_info(api_key, api_base_url: str = None) -> AiApiInfo:
 
 
 def get_openai_client(api_key: str, api_base_url: str) -> Union[openai.OpenAI, openai.AzureOpenAI]:
-    """Get OpenAI or AzureOpenAI client based on the API Base URL"""
+    """根据API基础URL获取OpenAI或AzureOpenAI客户端"""
     parsed_url = urlparse(api_base_url)
     if parsed_url.hostname and parsed_url.hostname.endswith(".openai.azure.com"):
         client = openai.AzureOpenAI(
@@ -1088,7 +1088,7 @@ def get_openai_client(api_key: str, api_base_url: str) -> Union[openai.OpenAI, o
 
 
 def get_openai_async_client(api_key: str, api_base_url: str) -> Union[openai.AsyncOpenAI, openai.AsyncAzureOpenAI]:
-    """Get OpenAI or AzureOpenAI client based on the API Base URL"""
+    """根据API基础URL获取OpenAI或AzureOpenAI异步客户端"""
     parsed_url = urlparse(api_base_url)
     if parsed_url.hostname and parsed_url.hostname.endswith(".openai.azure.com"):
         client = openai.AsyncAzureOpenAI(
@@ -1142,7 +1142,7 @@ def get_gemini_client(api_key, api_base_url=None) -> genai.Client:
 
 
 def normalize_email(email: str, check_deliverability=False) -> tuple[str, bool]:
-    """Normalize, validate and check deliverability of email address"""
+    """规范化、验证并检查电子邮件地址的可投递性"""
     lower_email = email.lower()
     try:
         valid_email = validate_email(lower_email, check_deliverability=check_deliverability)
@@ -1163,7 +1163,7 @@ def clean_text_for_db(text):
 
 
 def clean_object_for_db(data):
-    """Recursively clean PostgreSQL-incompatible characters from nested data structures."""
+    """从嵌套数据结构中递归清理PostgreSQL不兼容的字符。"""
     if isinstance(data, str):
         return clean_text_for_db(data)
     elif isinstance(data, dict):
@@ -1175,7 +1175,7 @@ def clean_object_for_db(data):
 
 
 def dict_to_tuple(d):
-    # Recursively convert dicts to sorted tuples for hashability
+    # 递归地将字典转换为排序的元组以实现可哈希性
     if isinstance(d, dict):
         return tuple(sorted((k, dict_to_tuple(v)) for k, v in d.items()))
     elif isinstance(d, list):

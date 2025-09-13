@@ -128,27 +128,27 @@ function processDirectory(filesToPush, folder) {
 
         for (const file of files) {
             const filePath = path.join(file.path, file.name || '');
-            // Skip hidden files and folders
+            // 跳过隐藏文件和文件夹
             if (file.name.startsWith('.')) {
                 continue;
             }
-            // Add supported files to index
+            // 将支持的文件添加到索引
             if (file.isFile() && isSupportedFileType(filePath)) {
-                console.log(`Add ${file.name} in ${file.path} for indexing`);
+                console.log(`将 ${file.name} 在 ${file.path} 中添加到索引`);
                 filesToPush.push(filePath);
             }
-            // Recursively process subdirectories
+            // 递归处理子目录
             if (file.isDirectory()) {
                 processDirectory(filesToPush, {'path': filePath});
             }
         }
     } catch (err) {
         if (err.code === 'EACCES') {
-            console.error(`Access denied to ${folder.path}`);
+            console.error(`拒绝访问 ${folder.path}`);
         } else if (err.code === 'ENOENT') {
-            console.error(`${folder.path} does not exist`);
+            console.error(`${folder.path} 不存在`);
         } else {
-            console.error(`An error occurred while reading directory: ${error.message}`);
+            console.error(`读取目录时发生错误: ${error.message}`);
         }
         return;
     }
@@ -156,7 +156,7 @@ function processDirectory(filesToPush, folder) {
 }
 
 function pushDataToKhoj (regenerate = false) {
-    // Don't sync if token or hostURL is not set or if already syncing
+    // 如果token或hostURL未设置或正在同步，则不进行同步
     if (store.get('khojToken') === '' || store.get('hostURL') === '' || syncing === true) {
         const win = BrowserWindow.getAllWindows()[0];
         if (win) win.webContents.send('update-state', state);
@@ -170,21 +170,21 @@ function pushDataToKhoj (regenerate = false) {
     const folders = store.get('folders') || [];
     state = { completed: true }
 
-    // Collect paths of all configured files to index
+    // 收集所有已配置文件的路径以进行索引
     for (const file of files) {
-        // Remove files that no longer exist
+        // 删除不再存在的文件
         if (!fs.existsSync(file.path)) {
-            console.error(`${file.path} does not exist`);
+            console.error(`${file.path} 不存在`);
             continue;
         }
         filesToPush.push(file.path);
     }
 
-    // Collect paths of all indexable files in configured folders
+    // 收集已配置文件夹中所有可索引文件的路径
     for (const folder of folders) {
-        // Remove folders that no longer exist
+        // 删除不再存在的文件夹
         if (!fs.existsSync(folder.path)) {
-            console.error(`${folder.path} does not exist`);
+            console.error(`${folder.path} 不存在`);
             continue;
         }
         processDirectory(filesToPush, folder);

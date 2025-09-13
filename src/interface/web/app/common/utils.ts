@@ -155,11 +155,11 @@ export const formatDateTime = (isoString: string): string => {
         const now = new Date();
         const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / 60000);
 
-        // Show relative time for recent dates
-        if (diffInMinutes < 1) return "just now";
-        if (diffInMinutes < 60) return `${diffInMinutes} minutes ago`;
-        if (diffInMinutes < 120) return "1 hour ago";
-        if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)} hours ago`;
+        // 显示最近日期的相对时间
+        if (diffInMinutes < 1) return "刚刚";
+        if (diffInMinutes < 60) return `${diffInMinutes}分钟前`;
+        if (diffInMinutes < 120) return "1小时前";
+        if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}小时前`;
 
         // For older dates, show full formatted date
         const formatter = new Intl.DateTimeFormat("en-US", {

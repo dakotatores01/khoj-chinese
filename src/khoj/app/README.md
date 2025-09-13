@@ -1,29 +1,29 @@
-# Django App
+# Django应用
 
-Khoj uses Django as the backend framework primarily for its powerful ORM and the admin interface. The Django app is located in the `src/app` directory. We have one installed app, under the `/database/` directory. This app is responsible for all the database related operations and holds all of our models. You can find the extensive Django documentation [here](https://docs.djangoproject.com/en/4.2/) 🌈.
+Khoj主要使用Django作为后端框架，因为它强大的ORM和管理员界面。Django应用位于`src/app`目录。我们有一个已安装的应用，在`/database/`目录下。这个应用负责所有数据库相关的操作，并包含我们所有的模型。您可以在[此处](https://docs.djangoproject.com/en/4.2/)找到详细的Django文档🌈。
 
-## Setup (Docker)
+## 设置 (Docker)
 
-### Prerequisites
-1. Ensure you have [Docker](https://docs.docker.com/get-docker/) installed.
-2. Ensure you have [Docker Compose](https://docs.docker.com/compose/install/) installed.
+### 先决条件
+1. 确保已安装[Docker](https://docs.docker.com/get-docker/)。
+2. 确保已安装[Docker Compose](https://docs.docker.com/compose/install/)。
 
-### Run
+### 运行
 
-Using the `docker-compose.yml` file in the root directory, you can run the Khoj app using the following command:
+使用根目录中的`docker-compose.yml`文件，您可以使用以下命令运行Khoj应用：
 ```bash
 docker-compose up
 ```
 
-## Setup (Local)
+## 设置 (本地)
 
-### Install Postgres (with PgVector)
+### 安装Postgres (带有PgVector)
 
 #### MacOS
-- Install the [Postgres.app](https://postgresapp.com/).
+- 安装[Postgres.app](https://postgresapp.com/)。
 
 #### Debian, Ubuntu
-From [official instructions](https://wiki.postgresql.org/wiki/Apt)
+来自[官方说明](https://wiki.postgresql.org/wiki/Apt)
 
 ```bash
 sudo apt install -y postgresql-common
@@ -32,21 +32,21 @@ sudo apt install postgres-16 postgresql-16-pgvector
 ```
 
 #### Windows
-- Use the [recommended installer](https://www.postgresql.org/download/windows/)
+- 使用[推荐的安装程序](https://www.postgresql.org/download/windows/)
 
-#### From Source
-1. Follow instructions to [Install Postgres](https://www.postgresql.org/download/)
-2. Follow instructions to [Install PgVector](https://github.com/pgvector/pgvector#installation) in case you need to manually install it. Reproduced instructions below for convenience.
+#### 从源码
+1. 按照说明[安装Postgres](https://www.postgresql.org/download/)
+2. 如果需要手动安装，请按照说明[安装PgVector](https://github.com/pgvector/pgvector#installation)。为方便起见，下面复制了说明。
 
 ```bash
 cd /tmp
 git clone --branch v0.5.1 https://github.com/pgvector/pgvector.git
 cd pgvector
 make
-make install # may need sudo
+make install # 可能需要sudo
 ```
 
-### Create the Khoj database
+### 创建Khoj数据库
 
 #### MacOS
 ```bash
@@ -58,36 +58,36 @@ createdb khoj -U postgres
 sudo -u postgres createdb khoj
 ```
 
-- [Optional] To set default postgres user's password
-  - Execute `ALTER USER postgres PASSWORD 'my_secure_password';` using `psql`
-  - Run `export $POSTGRES_PASSWORD=my_secure_password` in your terminal for Khoj to use it later
+- [可选] 设置默认postgres用户密码
+  - 使用`psql`执行`ALTER USER postgres PASSWORD 'my_secure_password';`
+  - 在终端中运行`export $POSTGRES_PASSWORD=my_secure_password`，供Khoj稍后使用
 
-### Install Khoj
+### 安装Khoj
 
 ```bash
 uv sync --all-extras
 ```
 
-### Make Khoj DB migrations
+### 创建Khoj数据库迁移
 
-This command will create the migrations for the database app. This command should be run whenever a new db model is added to the database app or an existing db model is modified (updated or deleted).
+此命令将为数据库应用创建迁移。每当向数据库应用添加新的数据库模型或修改现有的数据库模型（更新或删除）时，都应运行此命令。
 
 ```bash
 python3 src/manage.py makemigrations
 ```
 
-### Run Khoj DB migrations
+### 运行Khoj数据库迁移
 
-This command will run any pending migrations in your application.
+此命令将在您的应用中运行任何待处理的迁移。
 ```bash
 python3 src/manage.py migrate
 ```
 
-### Start Khoj Server
+### 启动Khoj服务器
 
-While we're using Django for the ORM, we're still using the FastAPI server for the API. This command automatically scaffolds the Django application in the backend.
+虽然我们使用Django作为ORM，但我们仍在使用FastAPI服务器作为API。此命令会在后端自动搭建Django应用。
 
-*Note: Anonymous mode bypasses authentication for local, single-user usage.*
+*注意：匿名模式绕过本地单用户使用的身份验证。*
 
 ```bash
 python3 src/khoj/main.py --anonymous-mode

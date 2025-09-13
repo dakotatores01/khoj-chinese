@@ -1,37 +1,37 @@
-# Run it locally
+# 本地运行
 
-## Prerequisites
+## 先决条件
 
-Install the runtime dependencies. This command should install all dev dependencies.
+安装运行时依赖项。此命令应安装所有开发依赖项。
 
 ```bash
 yarn install
 ```
 
-Run the application
+运行应用程序
 
 ```bash
 yarn start
 ```
 
-# Deploying the Electron App
+# 部署Electron应用
 
-## Prerequisites
+## 先决条件
 
-Install the ToDesktop CLI. Full documentation can be found here: https://www.npmjs.com/package/@todesktop/cli
+安装ToDesktop CLI。完整文档可以在此处找到：https://www.npmjs.com/package/@todesktop/cli
 
 ```bash
 yarn global add @todesktop/cli
 ```
 
-Configure the `todesktop.json` file. Fill in the `id` based on the application ID.
+配置`todesktop.json`文件。根据应用程序ID填写`id`。
 
-## Build
+## 构建
 
-This will prompt you to login. It triggers builds for all platforms.
+这将提示您登录。它会为所有平台触发构建。
 
 ```bash
 todesktop build
 ```
 
-If you get an error saying the command is not found, make sure that your `yarn` global bin directory is in your `PATH` environment variable. You can find the location of the global bin directory by running `yarn global bin`. Add this line to your `.bashrc` or `.zshrc` file: `export PATH="$PATH:$(yarn global bin)"`.
+如果您收到命令未找到的错误，请确保您的`yarn`全局bin目录在您的`PATH`环境变量中。您可以通过运行`yarn global bin`找到全局bin目录的位置。将此行添加到您的`.bashrc`或`.zshrc`文件中：`export PATH="$PATH:$(yarn global bin)"`。

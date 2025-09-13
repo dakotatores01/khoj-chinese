@@ -274,41 +274,41 @@
     <div class="main-content">
         <div id="khoj-header" class="khoj-header"></div>
         <div class="section-cards">
-            <!-- Replace the server URL and API key cards with: -->
+            <!-- 替换服务器URL和API密钥卡片为: -->
             <details class="collapsible">
-                <summary>Server URL</summary>
+                <summary>服务器URL</summary>
                 <div class="content">
-                    <input type="text" class="card-input" id="khoj-host-url" placeholder="Enter server URL">
+                    <input type="text" class="card-input" id="khoj-host-url" placeholder="输入服务器URL">
                 </div>
             </details>
 
             <details class="collapsible">
-                <summary>API Key</summary>
+                <summary>API密钥</summary>
                 <div class="content">
-                    <input type="text" class="card-input" id="khoj-access-key" placeholder="Enter API key">
+                    <input type="text" class="card-input" id="khoj-access-key" placeholder="输入API密钥">
                 </div>
             </details>
             <div class="card">
-                <div class="card-title">Files</div>
+                <div class="card-title">文件</div>
                 <div id="current-files"></div>
-                <button class="secondary-button" id="update-file" title="Add a file to be indexed to your Khoj knowledge base. Will be synced automatically.">Add File</button>
+                <button class="secondary-button" id="update-file" title="将文件添加到Khoj知识库进行索引。将自动同步。">添加文件</button>
             </div>
             <div class="card">
-                <div class="card-title">Folders</div>
+                <div class="card-title">文件夹</div>
                 <div id="current-folders"></div>
-                <button class="secondary-button" id="update-folder" title="Add a folder to be indexed to your Khoj knowledge base. All valid files will be synced automatically.">Add Folder</button>
+                <button class="secondary-button" id="update-folder" title="将文件夹添加到Khoj知识库进行索引。所有有效文件将自动同步。">添加文件夹</button>
             </div>
             <div class="sync-data">
                 <div id="loading-bar" style="display: none;"></div>
                 <div id="sync-status"></div>
                 <div id="big-actions">
-                    <button class="card-button" id="sync-force" title="Delete and re-index all configured files and folders">
-                        <img src="./assets/icons/upload.svg" class="sync-icon" alt="Sync">
-                        Force Sync
+                    <button class="card-button" id="sync-force" title="删除并重新索引所有已配置的文件和文件夹">
+                        <img src="./assets/icons/upload.svg" class="sync-icon" alt="同步">
+                        强制同步
                     </button>
-                    <button class="card-button" id="delete-all" title="Remove all indexed content from Khoj">
-                        <img src="./assets/icons/trash-solid.svg" class="trash-icon" alt="Delete All">
-                        Delete All
+                    <button class="card-button" id="delete-all" title="从Khoj中删除所有索引内容">
+                        <img src="./assets/icons/trash-solid.svg" class="trash-icon" alt="删除全部">
+                        删除全部
                     </button>
                 </div>
             </div>

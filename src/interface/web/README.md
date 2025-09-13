@@ -1,26 +1,26 @@
-This is a [Next.js](https://nextjs.org/) project.
+这是一个[Next.js](https://nextjs.org/)项目。
 
-## Getting Started
+## 开始使用
 
-First, install the dependencies:
+首先，安装依赖项：
 
 ```bash
 bun install
 ```
 
-In case you run into any dependency linking issues, you can try running:
+如果您遇到任何依赖项链接问题，可以尝试运行：
 
 ```bash
 bun add next
 ```
 
-### Run the development server:
+### 运行开发服务器：
 
 ```bash
 bun dev
 ```
 
-Make sure the `rewrites` in `next.config.mjs` are set up correctly for your environment. The rewrites are used to proxy requests to the API server.
+确保`next.config.mjs`中的`rewrites`为您的环境正确设置。重写用于将请求代理到API服务器。
 
 ```js
     rewrites: async () => {
@@ -33,44 +33,44 @@ Make sure the `rewrites` in `next.config.mjs` are set up correctly for your envi
     },
 ```
 
-The `destination` should be the URL of the API server.
+`destination`应该是API服务器的URL。
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+在浏览器中打开[http://localhost:3000](http://localhost:3000)查看结果。
 
-You can start editing the page by modifying any of the `.tsx` pages. The page auto-updates as you edit the file.
+您可以通过修改任何`.tsx`页面开始编辑页面。编辑文件时页面会自动更新。
 
-### Testing built files
+### 测试构建文件
 
-We've setup a utility command for building and serving the built files. This is useful for testing the production build locally.
+我们设置了一个用于构建和服务构建文件的实用程序命令。这对于在本地测试生产构建很有用。
 
-1. Exporting code
-   To build the files once and serve them, run:
+1. 导出代码
+   要构建文件一次并提供服务，请运行：
 
 ```bash
 bun export
 ```
 
-If you're using Windows:
+如果您使用Windows：
 
 ```bash
 bun windowsexport
 ```
 
-2. Continuously building code
+2. 持续构建代码
 
-To keep building the files and serving them, run:
+要持续构建文件并提供服务，请运行：
 
 ```bash
 bun watch
 ```
 
-If you're using Windows:
+如果您使用Windows：
 
 ```bash
 bun windowswatch
 ```
 
-Now you should be able to load your custom pages from the Khoj app at http://localhost:42110/. To server any of the built files, you should update the routes in the `web_client.py` like so, where `new_file` is the new page you've added in this repo:
+现在您应该能够从Khoj应用在http://localhost:42110/加载您的自定义页面。要提供任何构建文件的服务，您应该像这样更新`web_client.py`中的路由，其中`new_file`是您在此仓库中添加的新页面：
 
 ```python
 @web_client.post("/new_route", response_class=FileResponse)
@@ -85,12 +85,12 @@ def index_post(request: Request):
     )
 ```
 
-## Learn More
+## 了解更多
 
-To learn more about Next.js, take a look at the following resources:
+要了解更多关于Next.js的信息，请查看以下资源：
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Next.js App Router](https://nextjs.org/docs/app) - learn about the Next.js router.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js文档](https://nextjs.org/docs) - 了解Next.js的特性和API。
+- [Next.js App Router](https://nextjs.org/docs/app) - 了解Next.js路由器。
+- [学习Next.js](https://nextjs.org/learn) - 一个交互式的Next.js教程。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+您可以查看[Next.js GitHub仓库](https://github.com/vercel/next.js/) - 您的反馈和贡献是受欢迎的！
